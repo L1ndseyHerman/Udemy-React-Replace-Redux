@@ -13,9 +13,9 @@ export const useStore = () => {
   const setState = useState(globalState)[1];
 
   //    This is like the useReducer() action with the all caps and stuff:
-  const dispatch = (actionIdentifier) => {
+  const dispatch = (actionIdentifier, payload) => {
     //  "actions" is an object, but this action property is a function somehow?!
-    const newState = actions[actionIdentifier](globalState);
+    const newState = actions[actionIdentifier](globalState, payload);
     //  Merge the states:
     globalState = { ...globalState, ...newState };
 

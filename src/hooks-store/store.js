@@ -7,7 +7,7 @@ let listeners = [];
 let actions = {};
 
 //  A custom hook! All React hooks are functions.
-export const useStore = () => {
+export const useStore = (shouldListen = true) => {
   //  This is apparently allowed, can just set a useState() to trigger re-renders, but
   //  never read it's value?!?!
   const setState = useState(globalState)[1];
@@ -25,13 +25,17 @@ export const useStore = () => {
   };
 
   useEffect(() => {
-    listeners.push(setState);
+    if (shouldListen) {
+      listeners.push(setState);
+    }
 
     //  Remove the listener when the component un-mounts:
     return () => {
-      listeners = listeners.filter((li) => li !== setState);
+      if (shouldListen) {
+        listeners = listeners.filter((li) => li !== setState);
+      }
     };
-  }, [setState]);
+  }, [setState, shouldListen]);
 
   return [globalState, dispatch];
 };
